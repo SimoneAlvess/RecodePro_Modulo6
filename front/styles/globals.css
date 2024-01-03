@@ -1,0 +1,62 @@
+/** Fonts Google **/
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600&display=swap');
+
+/** Estilo corpo páginas **/
+:root {
+    --text-color-white: white;
+    --text-color-black: black;
+    --icon-color: #0d6efd;
+    --footer-color: #0d6efd;
+    --button-color: #0d6efd;
+    --bg-pages-url: url(/../img/background_cadastros.jpg);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+.main-container{
+   min-height: 76vh;
+   display: flex;
+   flex-direction: column;
+}
+
+/** Estilo do rodapé **/
+footer {
+    background-color: #0d6efd;
+    color: var(--text-color-white);
+    padding: 14px 0;
+    font-size: 13px;
+}
+
+/** Estilo cards **/
+.card-header {
+    background-color: rgb(243, 248, 254) !important;
+}
+
+/** Estilo icons **/
+.iconsStyle {
+    color: var(--icon-color) !important;
+    display: flex;
+    padding-bottom: 5px;
+}
+
+.iconSocial:hover {
+    color: rgb(119, 187, 255) !important;
+    cursor: pointer;
+}
+
+/** Estilo page contato **/
+.Contact {
+    background: var(--bg-pages-url) center/cover;
+    padding: 60px 0;
+}
+
+/** Estilo page destinos **/
+.bgDestino {
+    background: var(--bg-pages-url) center/cover;
+    height: 100vh;
+}
