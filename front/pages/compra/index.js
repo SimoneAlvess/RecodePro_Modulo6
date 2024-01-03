@@ -9,13 +9,29 @@ export default function Compra() {
   useEffect(() => {
     axios
       .get("https://localhost:7282/api/Compras")
-      .then((response) => {
-        setCompras(response.data);
+      .then(async (response) => {
+        const comprasDados = await Promise.all(
+          response.data.map(async (compra) => {
+            try {
+              const cliente = await axios.get(`https://localhost:7282/api/Clientes/${compra.clienteId}`);
+              const destino = await axios.get(`https://localhost:7282/api/Destinos/${compra.destinoId}`);
+              return { ...compra, cliente: cliente.data, destino: destino.data };
+            } catch (error) {
+              console.error(`Error ao buscar cliente e destino para compra ${compra.clienteId}  ${compra.destinoId}:`, error);
+              return compra;
+            }
+          })
+        );
+        setCompras(comprasDados);
       })
       .catch((error) => {
         console.error("Erro ao buscar a lista de compras:", error);
       });
   }, []);
+
+  const formatMoney = (price) => {
+    return price.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+  };
 
   return (
     <>
@@ -46,16 +62,13 @@ export default function Compra() {
                       </thead>
                       <tbody>
                         {compras.map((compra) => (
-                        
                           <tr key={compra.compraId}>
                             <td>{compra.compraId}</td>
-                            {/* falta chamar destino e cliente */}
                             <td>{compra.cliente?.nome}</td>
-                            <td>{compra.destino}</td>
+                            <td>{compra.destino?.nomeDestino}</td>
                             <td>{compra.dataHoraViagem}</td>
                             <td>{compra.formaPagamento}</td>
-                            {/* falta chamar o preço total */}
-                            <td>{compra.Destino?.precoTotal}</td>
+                            <td>{formatMoney(compra.destino?.precoTotal)}</td>
                           </tr>
                         ))}
                       </tbody>

@@ -1,8 +1,13 @@
 .bgPromo {
-	background: url(/../img/background_cadastros.jpg) top/cover !important;
-	color: white
+	background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(/../img/background_cadastros.jpg) top/cover !important;
+	color: white;
 }
 
 .promoStyle {
 	padding: 100px 0 100px 0 !important;
+}
+
+.card:hover {
+	transform: scale(1.05) !important;
+	transition: 0.3s ease-in-out !important;
 }

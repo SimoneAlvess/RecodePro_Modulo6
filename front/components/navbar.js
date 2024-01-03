@@ -11,9 +11,9 @@ export default function Navbar() {
     <div>
       <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
         <div className="container">
-          <a href="/" className="navbar-brand mb-2">
+          <Link href="/" className="navbar-brand mb-2">
             <img src="img/logo_destinofacil.png" alt="logo" width="145" height="39" />
-          </a>
+          </Link>
           <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenu" aria-controls="navbarMenu" aria-expanded="false" aria-label="Toggle navigation">
             <span className="navbar-toggler-icon"></span>
           </button>
@@ -33,7 +33,7 @@ export default function Navbar() {
               </Link>
               <div className="nav-item dropdown">
                 <a className="nav-link dropdown-toggle p-0" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  <i className="bi bi-person-fill-gear fs-4"></i> 
+                  <i className="bi bi-person-fill-gear fs-4"></i>
                 </a>
                 <div className="dropdown-menu dropdown-menu-end">
                   <Link className="dropdown-item" href={"cliente"}>

@@ -6,17 +6,32 @@ import axios from "axios";
 
 export default function Destino() {
   const [destinos, setDestinos] = useState([]);
- 
+
   useEffect(() => {
     axios
       .get("https://localhost:7282/api/Destinos")
-      .then((response) => {
-        setDestinos(response.data);
+      .then(async (response) => {
+        const destinosDados = await Promise.all(
+          response.data.map(async (destino) => {
+            try {
+              const promocao = await axios.get(`https://localhost:7282/api/Promocoes/${destino.promocaoId}`);
+              return { ...destino, promocao: promocao.data };
+            } catch (error) {
+              console.error(`Erro ao buscar promoção para o destino ${destino.destinoId}:`, error);
+              return destino;
+            }
+          })
+        );
+        setDestinos(destinosDados);
       })
       .catch((error) => {
         console.error("Erro ao buscar a lista de destinos:", error);
       });
   }, []);
+
+  const formatMoney = (price) => {
+    return price.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+  };
 
   return (
     <>
@@ -48,18 +63,16 @@ export default function Destino() {
                       </thead>
                       <tbody>
                         {destinos.map((destino) => (
-                      
                           <tr key={destino.destinoId}>
                             <td>{destino.destinoId}</td>
                             <td>{destino.nomeDestino}</td>
                             <td>
-                              <img src={destino.urlImagem} alt="Imagem do Destino" className="rounded-3 shadow" style={{width:'130px', height: '100px'}}/>
+                              <img src={destino.urlImagem} alt="Imagem do Destino" className="rounded-3 shadow" style={{ width: "130px", height: "100px" }} />
                             </td>
                             <td>{destino.transporte}</td>
-                            <td>R${destino.preco}</td>
-                            {/*  faltando chamar o desconto que tá na classe promoção */}
-                            <td>{destino.promocoes}%</td> 
-                            <td>R${destino.precoTotal}</td>
+                            <td>{formatMoney(destino.preco)}</td>
+                            <td>{destino.promocao?.desconto}%</td>
+                            <td>{formatMoney(destino.precoTotal)}</td>
                           </tr>
                         ))}
                       </tbody>
