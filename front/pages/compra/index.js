@@ -8,7 +8,7 @@ export default function Compra() {
 
   useEffect(() => {
     axios
-      .get("http://destinofacilapi.somee.com/api/Compras")
+      .get("https://destinofacilapi.somee.com/api/Compras")
       .then((response) => {
         setCompras(response.data);
       })

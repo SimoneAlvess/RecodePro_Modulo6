@@ -8,7 +8,7 @@ export default function Promocao() {
 
   useEffect(() => {
     axios
-      .get("http://destinofacilapi.somee.com/api/Promocoes")
+      .get("https://destinofacilapi.somee.com/api/Promocoes")
       .then((response) => {
         setPromocoes(response.data);
       })

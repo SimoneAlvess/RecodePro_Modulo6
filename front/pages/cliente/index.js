@@ -8,7 +8,7 @@ export default function Cliente() {
 
   useEffect(() => {
     axios
-      .get("http://destinofacilapi.somee.com/api/Clientes")
+      .get("https://destinofacilapi.somee.com/api/Clientes")
       .then((response) => {
         setClientes(response.data);
       })
