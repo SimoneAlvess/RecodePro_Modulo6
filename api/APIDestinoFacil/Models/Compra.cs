@@ -19,12 +19,10 @@ namespace APIDestinoFacil.Models
 
         public long ClienteId { get; set; }
 
-        [JsonIgnore]
         public Cliente Cliente { get; set; }
 
         public long DestinoId { get; set; }
 
-        [JsonIgnore]
         public Destino Destino { get; set; }
 
     }

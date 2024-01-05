@@ -25,10 +25,6 @@ namespace APIDestinoFacil.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Promocao>>> GetPromocoes()
         {
-          if (_context.Promocoes == null)
-          {
-              return NotFound();
-          }
             return await _context.Promocoes.ToListAsync();
         }
 
@@ -36,10 +32,6 @@ namespace APIDestinoFacil.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Promocao>> GetPromocao(long id)
         {
-          if (_context.Promocoes == null)
-          {
-              return NotFound();
-          }
             var promocao = await _context.Promocoes.FindAsync(id);
 
             if (promocao == null)
@@ -86,10 +78,6 @@ namespace APIDestinoFacil.Controllers
         [HttpPost]
         public async Task<ActionResult<Promocao>> PostPromocao(Promocao promocao)
         {
-          if (_context.Promocoes == null)
-          {
-              return Problem("Entity set 'ApiDbContext.Promocoes'  is null.");
-          }
             _context.Promocoes.Add(promocao);
             await _context.SaveChangesAsync();
 
@@ -100,10 +88,6 @@ namespace APIDestinoFacil.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePromocao(long id)
         {
-            if (_context.Promocoes == null)
-            {
-                return NotFound();
-            }
             var promocao = await _context.Promocoes.FindAsync(id);
             if (promocao == null)
             {
@@ -118,7 +102,7 @@ namespace APIDestinoFacil.Controllers
 
         private bool PromocaoExists(long id)
         {
-            return (_context.Promocoes?.Any(e => e.PromocaoId == id)).GetValueOrDefault();
+            return _context.Promocoes.Any(e => e.PromocaoId == id);
         }
     }
 }

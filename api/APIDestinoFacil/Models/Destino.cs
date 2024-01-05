@@ -8,10 +8,6 @@ namespace APIDestinoFacil.Models
     [Table("Destinos")]
     public class Destino
     {
-        public Destino()
-        {
-            Compras = new Collection<Compra>();
-        }
 
         [Key]
         public long DestinoId { get; set; }
@@ -38,9 +34,9 @@ namespace APIDestinoFacil.Models
 
         public long PromocaoId { get; set; }
 
-        [JsonIgnore]
         public Promocao Promocao { get; set; }
 
-        public ICollection<Compra> Compras { get; set; }
+        [JsonIgnore]
+        public List<Compra> Compras { get; set; }
     }
 }

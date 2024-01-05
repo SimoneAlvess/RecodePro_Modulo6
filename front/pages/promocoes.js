@@ -9,20 +9,9 @@ export default function Promocoes() {
 
   useEffect(() => {
     axios
-      .get("https://localhost:7282/api/Destinos")
-      .then(async (response) => {
-        const destinosDados = await Promise.all(
-          response.data.map(async (destino) => {
-            try {
-              const promocao = await axios.get(`https://localhost:7282/api/Promocoes/${destino.promocaoId}`);
-              return { ...destino, promocao: promocao.data };
-            } catch (error) {
-              console.error(`Erro ao buscar promoção para o destino ${destino.destinoId}:`, error);
-              return destino;
-            }
-          })
-        );
-        setDestinos(destinosDados);
+      .get("http://destinofacilapi.somee.com/api/Destinos")
+      .then((response) => {
+        setDestinos(response.data);
       })
       .catch((error) => {
         console.error("Erro ao buscar a lista de destinos:", error);

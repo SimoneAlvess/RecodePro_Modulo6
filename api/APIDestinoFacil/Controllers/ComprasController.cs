@@ -25,22 +25,24 @@ namespace APIDestinoFacil.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Compra>>> GetCompras()
         {
-          if (_context.Compras == null)
-          {
-              return NotFound();
-          }
-            return await _context.Compras.ToListAsync();
+            var compras = await _context.Compras
+                .Include(c => c.Cliente)
+                .Include(d => d.Destino)
+                .Include(d => d.Destino.Promocao)
+                .ToListAsync();
+
+            return compras;
         }
 
         // GET: api/Compras/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Compra>> GetCompra(long id)
         {
-          if (_context.Compras == null)
-          {
-              return NotFound();
-          }
-            var compra = await _context.Compras.FindAsync(id);
+            var compra = await _context.Compras
+                .Include(c => c.Cliente)
+                .Include(d => d.Destino)
+                .Include(d => d.Destino.Promocao)
+                .FirstOrDefaultAsync(c => c.CompraId == id);
 
             if (compra == null)
             {
@@ -86,10 +88,6 @@ namespace APIDestinoFacil.Controllers
         [HttpPost]
         public async Task<ActionResult<Compra>> PostCompra(Compra compra)
         {
-          if (_context.Compras == null)
-          {
-              return Problem("Entity set 'ApiDbContext.Compras'  is null.");
-          }
             _context.Compras.Add(compra);
             await _context.SaveChangesAsync();
 
@@ -100,10 +98,6 @@ namespace APIDestinoFacil.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCompra(long id)
         {
-            if (_context.Compras == null)
-            {
-                return NotFound();
-            }
             var compra = await _context.Compras.FindAsync(id);
             if (compra == null)
             {
@@ -118,7 +112,7 @@ namespace APIDestinoFacil.Controllers
 
         private bool CompraExists(long id)
         {
-            return (_context.Compras?.Any(e => e.CompraId == id)).GetValueOrDefault();
+            return _context.Compras.Any(e => e.CompraId == id);
         }
     }
 }

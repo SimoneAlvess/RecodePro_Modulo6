@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using APIDestinoFacil.Context;
 using APIDestinoFacil.Models;
-using Microsoft.AspNetCore.Cors;
 
 namespace APIDestinoFacil.Controllers
 {
@@ -26,10 +25,6 @@ namespace APIDestinoFacil.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Cliente>>> GetClientes()
         {
-          if (_context.Clientes == null)
-          {
-              return NotFound();
-          }
             return await _context.Clientes.ToListAsync();
         }
 
@@ -37,10 +32,6 @@ namespace APIDestinoFacil.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Cliente>> GetCliente(long id)
         {
-          if (_context.Clientes == null)
-          {
-              return NotFound();
-          }
             var cliente = await _context.Clientes.FindAsync(id);
 
             if (cliente == null)
@@ -87,10 +78,6 @@ namespace APIDestinoFacil.Controllers
         [HttpPost]
         public async Task<ActionResult<Cliente>> PostCliente(Cliente cliente)
         {
-          if (_context.Clientes == null)
-          {
-              return Problem("Entity set 'ApiDbContext.Clientes'  is null.");
-          }
             _context.Clientes.Add(cliente);
             await _context.SaveChangesAsync();
 
@@ -101,10 +88,6 @@ namespace APIDestinoFacil.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCliente(long id)
         {
-            if (_context.Clientes == null)
-            {
-                return NotFound();
-            }
             var cliente = await _context.Clientes.FindAsync(id);
             if (cliente == null)
             {
@@ -119,7 +102,7 @@ namespace APIDestinoFacil.Controllers
 
         private bool ClienteExists(long id)
         {
-            return (_context.Clientes?.Any(e => e.ClienteId == id)).GetValueOrDefault();
+            return _context.Clientes.Any(e => e.ClienteId == id);
         }
     }
 }

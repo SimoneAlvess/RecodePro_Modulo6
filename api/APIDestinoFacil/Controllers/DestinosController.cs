@@ -25,22 +25,20 @@ namespace APIDestinoFacil.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Destino>>> GetDestinos()
         {
-          if (_context.Destinos == null)
-          {
-              return NotFound();
-          }
-            return await _context.Destinos.ToListAsync();
+            var destino = await _context.Destinos
+                .Include(p => p.Promocao)
+                .ToListAsync();
+
+            return destino;
         }
 
         // GET: api/Destinos/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Destino>> GetDestino(long id)
         {
-          if (_context.Destinos == null)
-          {
-              return NotFound();
-          }
-            var destino = await _context.Destinos.FindAsync(id);
+            var destino = await _context.Destinos
+                 .Include(p => p.Promocao)
+                 .FirstOrDefaultAsync(c => c.DestinoId == id);
 
             if (destino == null)
             {
@@ -86,10 +84,6 @@ namespace APIDestinoFacil.Controllers
         [HttpPost]
         public async Task<ActionResult<Destino>> PostDestino(Destino destino)
         {
-          if (_context.Destinos == null)
-          {
-              return Problem("Entity set 'ApiDbContext.Destinos'  is null.");
-          }
             _context.Destinos.Add(destino);
             await _context.SaveChangesAsync();
 
@@ -100,10 +94,6 @@ namespace APIDestinoFacil.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteDestino(long id)
         {
-            if (_context.Destinos == null)
-            {
-                return NotFound();
-            }
             var destino = await _context.Destinos.FindAsync(id);
             if (destino == null)
             {
@@ -118,7 +108,7 @@ namespace APIDestinoFacil.Controllers
 
         private bool DestinoExists(long id)
         {
-            return (_context.Destinos?.Any(e => e.DestinoId == id)).GetValueOrDefault();
+            return _context.Destinos.Any(e => e.DestinoId == id);
         }
     }
 }

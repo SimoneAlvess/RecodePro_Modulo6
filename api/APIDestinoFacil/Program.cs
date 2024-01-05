@@ -22,11 +22,10 @@ builder.Services.AddCors(options => {
     });
 
 // Conexão com banco de dados
-string mySqlConnection = builder.Configuration.GetConnectionString("DefaultConnection");
+string SqlConnection = builder.Configuration.GetConnectionString("DefaultConnection");
 
 builder.Services.AddDbContext<ApiDbContext>(options =>
-                    options.UseMySql(mySqlConnection,
-                    ServerVersion.AutoDetect(mySqlConnection)));
+                    options.UseSqlServer(SqlConnection));
 
 var app = builder.Build();
 

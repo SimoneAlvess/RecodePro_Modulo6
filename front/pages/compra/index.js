@@ -8,21 +8,9 @@ export default function Compra() {
 
   useEffect(() => {
     axios
-      .get("https://localhost:7282/api/Compras")
-      .then(async (response) => {
-        const comprasDados = await Promise.all(
-          response.data.map(async (compra) => {
-            try {
-              const cliente = await axios.get(`https://localhost:7282/api/Clientes/${compra.clienteId}`);
-              const destino = await axios.get(`https://localhost:7282/api/Destinos/${compra.destinoId}`);
-              return { ...compra, cliente: cliente.data, destino: destino.data };
-            } catch (error) {
-              console.error(`Error ao buscar cliente e destino para compra ${compra.clienteId}  ${compra.destinoId}:`, error);
-              return compra;
-            }
-          })
-        );
-        setCompras(comprasDados);
+      .get("http://destinofacilapi.somee.com/api/Compras")
+      .then((response) => {
+        setCompras(response.data);
       })
       .catch((error) => {
         console.error("Erro ao buscar a lista de compras:", error);
@@ -64,11 +52,11 @@ export default function Compra() {
                         {compras.map((compra) => (
                           <tr key={compra.compraId}>
                             <td>{compra.compraId}</td>
-                            <td>{compra.cliente?.nome}</td>
-                            <td>{compra.destino?.nomeDestino}</td>
+                            <td>{compra.cliente.nome}</td>
+                            <td>{compra.destino.nomeDestino}</td>
                             <td>{compra.dataHoraViagem}</td>
                             <td>{compra.formaPagamento}</td>
-                            <td>{formatMoney(compra.destino?.precoTotal)}</td>
+                            <td>{formatMoney(compra.destino.precoTotal)}</td>
                           </tr>
                         ))}
                       </tbody>

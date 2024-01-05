@@ -3,6 +3,7 @@ using System;
 using APIDestinoFacil.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
@@ -11,15 +12,17 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace APIDestinoFacil.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20231218180903_primeiro")]
-    partial class primeiro
+    [Migration("20240104215914_sqlserver")]
+    partial class sqlserver
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "6.0.25")
-                .HasAnnotation("Relational:MaxIdentifierLength", 64);
+                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
             modelBuilder.Entity("APIDestinoFacil.Models.Cliente", b =>
                 {
@@ -27,20 +30,22 @@ namespace APIDestinoFacil.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("ClienteId"), 1L, 1);
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(128)
-                        .HasColumnType("varchar(128)");
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<string>("Nome")
                         .IsRequired()
                         .HasMaxLength(128)
-                        .HasColumnType("varchar(128)");
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<string>("Senha")
                         .IsRequired()
                         .HasMaxLength(128)
-                        .HasColumnType("varchar(128)");
+                        .HasColumnType("nvarchar(128)");
 
                     b.HasKey("ClienteId");
 
@@ -53,11 +58,13 @@ namespace APIDestinoFacil.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("CompraId"), 1L, 1);
+
                     b.Property<long>("ClienteId")
                         .HasColumnType("bigint");
 
                     b.Property<DateTime>("DataHoraViagem")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("datetime2");
 
                     b.Property<long>("DestinoId")
                         .HasColumnType("bigint");
@@ -65,7 +72,7 @@ namespace APIDestinoFacil.Migrations
                     b.Property<string>("FormaPagamento")
                         .IsRequired()
                         .HasMaxLength(128)
-                        .HasColumnType("varchar(128)");
+                        .HasColumnType("nvarchar(128)");
 
                     b.HasKey("CompraId");
 
@@ -82,10 +89,12 @@ namespace APIDestinoFacil.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("DestinoId"), 1L, 1);
+
                     b.Property<string>("NomeDestino")
                         .IsRequired()
                         .HasMaxLength(128)
-                        .HasColumnType("varchar(128)");
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<decimal>("Preco")
                         .HasColumnType("decimal(10,2)");
@@ -99,12 +108,12 @@ namespace APIDestinoFacil.Migrations
                     b.Property<string>("Transporte")
                         .IsRequired()
                         .HasMaxLength(128)
-                        .HasColumnType("varchar(128)");
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<string>("UrlImagem")
                         .IsRequired()
                         .HasMaxLength(300)
-                        .HasColumnType("varchar(300)");
+                        .HasColumnType("nvarchar(300)");
 
                     b.HasKey("DestinoId");
 
@@ -119,16 +128,18 @@ namespace APIDestinoFacil.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("PromocaoId"), 1L, 1);
+
                     b.Property<int>("Desconto")
                         .HasColumnType("int");
 
                     b.Property<string>("Pacote")
                         .IsRequired()
                         .HasMaxLength(128)
-                        .HasColumnType("varchar(128)");
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<DateTime>("ValidadePromocao")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("datetime2");
 
                     b.HasKey("PromocaoId");
 
@@ -138,13 +149,13 @@ namespace APIDestinoFacil.Migrations
             modelBuilder.Entity("APIDestinoFacil.Models.Compra", b =>
                 {
                     b.HasOne("APIDestinoFacil.Models.Cliente", "Cliente")
-                        .WithMany()
+                        .WithMany("Compras")
                         .HasForeignKey("ClienteId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("APIDestinoFacil.Models.Destino", "Destino")
-                        .WithMany()
+                        .WithMany("Compras")
                         .HasForeignKey("DestinoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -163,6 +174,16 @@ namespace APIDestinoFacil.Migrations
                         .IsRequired();
 
                     b.Navigation("Promocao");
+                });
+
+            modelBuilder.Entity("APIDestinoFacil.Models.Cliente", b =>
+                {
+                    b.Navigation("Compras");
+                });
+
+            modelBuilder.Entity("APIDestinoFacil.Models.Destino", b =>
+                {
+                    b.Navigation("Compras");
                 });
 
             modelBuilder.Entity("APIDestinoFacil.Models.Promocao", b =>
